@@ -1,0 +1,96 @@
+.Home-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #333;
+    gap: 1rem;
+    height: fit-content;
+    min-height: 100vh;
+}
+
+.Login-link-container {
+    padding: 2rem;
+    border-bottom: 1px solid white;
+    width: 100%;
+    font-size: 3rem;
+}
+.Login-link{
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    background-color: black;
+    color: white;
+    padding: 1rem 2rem;
+    width: 10rem;
+    border: 1px solid black;
+}
+.Login-link:hover {
+    border: 1px solid white;
+}
+
+.products-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.searchbar-container {
+    display: flex;
+    gap: 1rem;
+    margin-left: 2rem;
+}
+.searchbar-input {
+    width: 20%;
+    padding: 0.1rem;
+    background-color: black;
+    color: white;
+    font-size: 1rem;
+    border: 1px solid white;
+}
+.searchbar-button {
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+}
+.searchbar-button:hover {
+    border: 1px solid white;
+    cursor: pointer;
+}
+.product-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+}
+
+.Login-admin-name {
+    color: white;
+}
+
+.Login-logout-button:hover  {
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .Login-link {
+        width: 90%;
+        margin: auto;
+    }
+
+    .searchbar-container {
+        flex-direction: column;
+        flex-wrap: wrap;
+        width: 90%;
+        margin: auto;
+    }
+    .searchbar-input {
+        width: 100%;
+        padding: 1rem;
+        font-size: 2rem;
+    }
+    .product-list-container {
+        gap: 3rem;
+    }
+}

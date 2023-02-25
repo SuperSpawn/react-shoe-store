@@ -1,0 +1,76 @@
+
+.Login-container {
+    background-color: #333;
+    width: 100%;
+    height: fit-content;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.Login-card-container {
+    width: 50%;
+    height: fit-content;
+    min-height: 10rem;
+
+    border: 1px solid white;
+    border-radius: 0.5rem;
+    
+    background-color: black;
+    color: white;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+    padding: 2rem 1rem;
+}
+
+.Login-card-button {
+    width: 45%;
+    padding: 1rem 1rem;
+
+    font-size: 2rem;
+
+    background-color: #333;
+    border: 1px solid white;
+    color: white;
+
+    border-radius: 20rem;
+}
+.Login-card-button:hover {
+    cursor: pointer;
+
+    background-color: white;
+    color: black;
+    border: 1px solid #333;
+}
+
+
+
+.Login-card-input {
+    font-size: 3rem;
+}
+.Login-card-input > input {
+    padding: 0.2rem;
+}
+
+.Login-card-error-message {
+    color: red;
+    font-size: 2rem;
+}
+
+@media (max-width: 768px) {
+    .Login-card-container {
+        width: 90%;
+        margin: auto;
+        height: fit-content;
+        min-height: 30rem;
+    }
+    .Login-card-button {
+        width: 90%;
+    }
+}
