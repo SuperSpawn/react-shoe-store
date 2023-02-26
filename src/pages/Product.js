@@ -17,7 +17,9 @@ export const Product = ({currentProduct, setProductArray, isAdmin, isEditingProd
   const productStockRef = useRef(null)
 
 
-  let isGood = true;
+  let isGood = useRef(true);
+
+
 
   const logoutHandler = () => {
     localStorage.removeItem('current-admin');
@@ -26,31 +28,61 @@ export const Product = ({currentProduct, setProductArray, isAdmin, isEditingProd
   };
 
 
-  useEffect(() => {
+  
     if(!currentAdmin) {
-        const admin = JSON.parse(localStorage.getItem('current-admin'))
-        if(admin) {
-            setCurrentAdmin(admin)
-            setIsAdmin(true);
-        }
+      const admin = JSON.parse(localStorage.getItem('current-admin'))
+      if(admin) {
+          setCurrentAdmin(admin)
+          setIsAdmin(true);
+      }
     }
-
+  
+  
     if(!currentProduct) {
       const product = JSON.parse(localStorage.getItem('current-product'))
       if(product) {
+        console.log(product)
         setCurrentProduct(product);
-        isGood = true;
+        isGood.current = true;
       }
     }
-
-  }, [])
-
-
+  
   const addToCartHandler = () => {
     navigate('/cart');
   }
   const editProductHandler = () => {
     setIsEditingProduct(true)
+  }
+  const saveChangesHandler = () => {
+    for(let i in productArray) {
+      if(productArray[i].id === currentProduct.id) {
+        currentProduct.name = productNameRef.current.value;
+        currentProduct.description = productDescriptionRef.current.value;
+        currentProduct.price = productPriceRef.current.value;
+        currentProduct.stock = productStockRef.current.value;
+
+        fetch(`https://63f84b981dc21d5465bc6582.mockapi.io/shoes/${currentProduct.id}`, {
+          method: 'PUT', // or PATCH
+          headers: {'content-type':'application/json'},
+          body: JSON.stringify(currentProduct)
+        }).then(res => {
+          if (res.ok) {
+            return res.json();
+          }
+          // handle error
+          console.log('error: cannot update product')
+        }).then(task => {
+          // Do something with updated task
+          localStorage.setItem('current-product', JSON.stringify(task))
+          setCurrentProduct(task)
+          productArray[i] = task;
+          setProductArray(productArray)
+        }).catch(error => {
+          // handle error
+          console.error(error.message);
+        })
+      }
+    }
   }
   const cancelChangesHandler = () => {
     productNameRef.current.value = ''
@@ -87,7 +119,7 @@ export const Product = ({currentProduct, setProductArray, isAdmin, isEditingProd
     }
   }
 
-  if(isGood === false) {
+  if(isGood.current === false) {
     return (
       <div className='Product-container'>
         {
@@ -168,7 +200,7 @@ export const Product = ({currentProduct, setProductArray, isAdmin, isEditingProd
         </div>
 
         <div className='Product-admin-section-button-section'>
-          <button>Save changes</button>
+          <button onClick={saveChangesHandler}>Save changes</button>
           <button onClick={cancelChangesHandler}>Cancel changes</button>
           <button onClick={deleteHandler}>Delete product</button>
         </div>

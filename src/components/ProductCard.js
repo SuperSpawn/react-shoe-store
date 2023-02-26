@@ -36,6 +36,7 @@ export const ProductCard = ({data, isAdmin, setCurrentProduct, productArray,setP
         }).then(task => {
           // Do something with deleted task
           setCurrentProduct(null)
+          localStorage.removeItem('current-product')
           setCounter(counter + 1)
           productArray.splice(i, 1)
           setProductArray(productArray)
