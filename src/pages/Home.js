@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect, useState, useRef} from 'react'
 import { Outlet, Link } from "react-router-dom";
 import { ProductCard } from '../components/ProductCard';
 
@@ -8,15 +8,18 @@ import '../styles/pages/Home.css'
 export const Home = ({productArray, setProductArray, isAdmin, currentAdmin, setCurrentAdmin, setIsAdmin, setCurrentProduct, isEditingProduct, setIsEditingProduct}) => {
 
     const [counter, setCounter] = useState(0)
+    const [filter, setFilter] = useState('')
+    const searchbarRef = useRef(null)
 
     const logoutHandler = () => {
         localStorage.removeItem('current-admin');
         setIsAdmin(false);
         setCurrentAdmin(null);
     };
-
-    
-
+    const searchHandler = () => {
+        console.log(searchbarRef.current.value)
+        setFilter(searchbarRef.current.value);
+    }
 
     useEffect(() => {
         if(!currentAdmin) {
@@ -25,6 +28,9 @@ export const Home = ({productArray, setProductArray, isAdmin, currentAdmin, setC
                 setCurrentAdmin(admin)
                 setIsAdmin(true);
             }
+        }
+        else {
+            setIsAdmin(true)
         }
     }, [])
 
@@ -53,13 +59,18 @@ export const Home = ({productArray, setProductArray, isAdmin, currentAdmin, setC
         <div className='products-container'>
             <div className='navbar-container'>
                 <div className='searchbar-container'>
-                    <input className='searchbar-input' type='text'/>
-                    <button className='searchbar-button'>Search</button>
+                    <input ref={searchbarRef} className='searchbar-input' type='text'/>
+                    <button onClick={searchHandler} className='searchbar-button'>Search</button>
                 </div>
             </div>
             <div className='product-list-container'>
                 {
-                    productArray.map((product, index) => {
+                    productArray.map((product) => {
+                        product.name = product.name.toLowerCase()
+                        return product
+                    }).filter((product, index) => {
+                        return product.name.includes(filter)
+                    }).map((product, index) => {
                         return <ProductCard 
                             key={index} 
                             data={product} 

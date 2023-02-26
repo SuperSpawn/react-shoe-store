@@ -27,26 +27,28 @@ export const Product = ({currentProduct, setProductArray, isAdmin, isEditingProd
     setCurrentAdmin(null);
   };
 
-
-  console.log(currentAdmin)
-  console.log(currentProduct)
   
-    if(!currentAdmin) {
-      const admin = JSON.parse(localStorage.getItem('current-admin'))
-      if(admin) {
-          setCurrentAdmin(admin)
-          setIsAdmin(true);
+    useEffect(() => {
+      if(!currentAdmin) {
+        const admin = JSON.parse(localStorage.getItem('current-admin'))
+        if(admin) {
+            setCurrentAdmin(admin)
+            setIsAdmin(true);
+        }
       }
-    }
-  
-    if(!currentProduct) {
-      const product = JSON.parse(localStorage.getItem('current-product'))
-      if(product) {
-        console.log(product)
-        setCurrentProduct(product);
-        isGood.current = true;
+      else {
+        setIsAdmin(true)
       }
-    }
+    
+      if(!currentProduct) {
+        const product = JSON.parse(localStorage.getItem('current-product'))
+        if(product) {
+          console.log(product)
+          setCurrentProduct(product);
+          isGood.current = true;
+        }
+      }
+    }, [])
   
   const addToCartHandler = () => {
     navigate('/cart');
