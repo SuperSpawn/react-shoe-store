@@ -19,8 +19,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false)
   const [currentAdmin, setCurrentAdmin] = useState(null);
-  const [currentProduct, setCurrentProduct] = useState(null)
-  const {isEditingProduct, setIsEditingProduct} = useState(false)
+  const [currentProduct, setCurrentProduct] = useState(null);
+  const [isEditingProduct, setIsEditingProduct] = useState(false);
 
   useEffect(() => {
     fetch("https://63f84b981dc21d5465bc6582.mockapi.io/shoes", {
@@ -70,6 +70,7 @@ function App() {
       
     });
 
+
     
 
   }, []);
@@ -85,12 +86,15 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route index element={ <Home 
-            productArray={productArray} 
+            productArray={productArray}
+            setProductArray={setProductArray} 
             isAdmin={isAdmin} 
             currentAdmin={currentAdmin} 
             setCurrentAdmin={setCurrentAdmin}
             setIsAdmin={setIsAdmin}
             setCurrentProduct={setCurrentProduct}
+            isEditingProduct={isEditingProduct}
+            setIsEditingProduct={setIsEditingProduct} 
           />}
         />
         <Route path="LogIn" element={ <LogIn adminArray={adminArray} setIsAdmin={setIsAdmin} setCurrentAdmin={setCurrentAdmin}/>}/>
@@ -98,6 +102,14 @@ function App() {
           <Product
             currentProduct={currentProduct}
             setProductArray={setProductArray}
+            isAdmin={isAdmin}
+            isEditingProduct={isEditingProduct}
+            setIsEditingProduct={setIsEditingProduct}
+            setCurrentProduct={setCurrentProduct}
+            setIsAdmin={setIsAdmin}
+            setCurrentAdmin={setCurrentAdmin}
+            currentAdmin={currentAdmin}
+            productArray={productArray}
           />
         }/>
         <Route path="*" element={ <NoPage/> }/>

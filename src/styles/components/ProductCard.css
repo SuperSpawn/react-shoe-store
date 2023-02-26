@@ -11,7 +11,12 @@
     border: 1px solid white;
     background-color: black;
 }
-.ProductCard-container > img {
+.ProductCard-container:hover {
+    cursor: pointer;
+}
+
+
+.ProductCard-container img {
     width: 100%;
 }
 .ProductCard-product-name {
@@ -34,10 +39,10 @@
     border-radius: 10rem;
 }
 .ProductCard-button:hover {
-    cursor: pointer;
     background-color: #333;
     color: white;
     border: 1px solid white;
+    cursor: pointer;
 }
 
 .ProductCard-product-in-stock {
@@ -49,7 +54,9 @@
     font-size: 0.8rem;
 }
 
-
+.ProductCard-clickable:hover {
+    cursor: pointer;
+}
 
 @media (max-width: 768px) {
     .ProductCard-container {

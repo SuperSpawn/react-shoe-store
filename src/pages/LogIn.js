@@ -17,6 +17,7 @@ export const LogIn = ({adminArray, setIsAdmin, setCurrentAdmin}) => {
 
     for(let i of adminArray) {
       if(i.email === email && i.password === password) { 
+        localStorage.setItem('current-admin', JSON.stringify(i))
         setCurrentAdmin(i);
         setIsAdmin(true)
         navigate("/")

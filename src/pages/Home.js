@@ -1,16 +1,35 @@
-import React from 'react'
+import React,{useEffect, useState} from 'react'
 import { Outlet, Link } from "react-router-dom";
 import { ProductCard } from '../components/ProductCard';
 
 import "../styles/Reset.css"
 import '../styles/pages/Home.css'
 
-export const Home = ({productArray, isAdmin, currentAdmin, setCurrentAdmin, setIsAdmin, setCurrentProduct}) => {
+export const Home = ({productArray, setProductArray, isAdmin, currentAdmin, setCurrentAdmin, setIsAdmin, setCurrentProduct, isEditingProduct, setIsEditingProduct}) => {
+
+    const [counter, setCounter] = useState(0)
 
     const logoutHandler = () => {
+        localStorage.removeItem('current-admin');
         setIsAdmin(false);
         setCurrentAdmin(null);
     };
+
+    
+
+
+    useEffect(() => {
+        if(!currentAdmin) {
+            const admin = JSON.parse(localStorage.getItem('current-admin'))
+            if(admin) {
+                setCurrentAdmin(admin)
+                setIsAdmin(true);
+            }
+        }
+    }, [])
+
+
+    console.log(currentAdmin)
 
   return (
     <div className='Home-container'>
@@ -46,6 +65,12 @@ export const Home = ({productArray, isAdmin, currentAdmin, setCurrentAdmin, setI
                             data={product} 
                             isAdmin={isAdmin}
                             setCurrentProduct={setCurrentProduct}
+                            productArray={productArray}
+                            setProductArray={setProductArray}
+                            counter={counter}
+                            setCounter={setCounter}
+                            isEditingProduct={isEditingProduct}
+                            setIsEditingProduct={setIsEditingProduct}
                         />   
                     })
                 }

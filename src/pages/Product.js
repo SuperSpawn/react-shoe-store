@@ -1,32 +1,180 @@
-import React from 'react'
+import React,{useEffect, useRef} from 'react'
 // page for product stuff 
+import { useNavigate } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
+
+import '../styles/pages/Home.css'
 import '../styles/pages/Product.css'
 
 
-export const Product = ({currentProduct, setProductArray, isAdmin}) => {
+export const Product = ({currentProduct, setProductArray, isAdmin, isEditingProduct, setIsEditingProduct, setCurrentProduct, setIsAdmin, setCurrentAdmin, currentAdmin, productArray}) => {
+
+  let navigate = useNavigate()
+
+  const productNameRef = useRef(null)
+  const productDescriptionRef = useRef(null)
+  const productPriceRef = useRef(null)
+  const productStockRef = useRef(null)
+
+
+  let isGood = true;
+
+  const logoutHandler = () => {
+    localStorage.removeItem('current-admin');
+    setIsAdmin(false);
+    setCurrentAdmin(null);
+  };
+
+
+  useEffect(() => {
+    if(!currentAdmin) {
+        const admin = JSON.parse(localStorage.getItem('current-admin'))
+        if(admin) {
+            setCurrentAdmin(admin)
+            setIsAdmin(true);
+        }
+    }
+
+    if(!currentProduct) {
+      const product = JSON.parse(localStorage.getItem('current-product'))
+      if(product) {
+        setCurrentProduct(product);
+        isGood = true;
+      }
+    }
+
+  }, [])
+
+
+  const addToCartHandler = () => {
+    navigate('/cart');
+  }
+  const editProductHandler = () => {
+    setIsEditingProduct(true)
+  }
+  const cancelChangesHandler = () => {
+    productNameRef.current.value = ''
+    productDescriptionRef.current.value = ''
+    productPriceRef.current.value = ''
+    productStockRef.current.value = ''
+
+
+    setIsEditingProduct(false)
+  }
+  const deleteHandler = () => {
+    for(let i in productArray) {
+      if(productArray[i].id === currentProduct.id) {
+
+        fetch(`https://63f84b981dc21d5465bc6582.mockapi.io/shoes/${currentProduct.id}`, {
+          method: 'DELETE',
+        }).then(res => {
+          if (res.ok) {
+            return res.json();
+          }
+          // handle error
+          console.log("cannot delete")
+        }).then(task => {
+          // Do something with deleted task
+          setCurrentProduct(null)
+          productArray.splice(i, 1)
+          setProductArray(productArray)
+          navigate('/')
+        }).catch(error => {
+            // handle error
+            console.error(error.message)
+        })
+      }
+    }
+  }
+
+  if(isGood === false) {
+    return (
+      <div className='Product-container'>
+        {
+            !isAdmin && (
+            <div className='Login-link-container'>
+                <Link className='Login-link' to="/LogIn">login</Link>
+                <Outlet/>
+            </div>
+            )
+        }
+        {
+            isAdmin && (
+                <div className='Login-link-container'>
+                    <p className='Login-admin-name'>Hello {currentAdmin.name},</p>
+                    <button onClick={logoutHandler} className='Login-link Login-logout-button'>logout</button>
+                </div>
+            )
+        }
+      </div>
+    )
+  }
 
   return (
     <div className='Product-container'>
+      <div className='Product-navbar-section'>
+        {
+          !isAdmin && (
+          <div className='Login-link-container'>
+              <Link className='Login-link' to="/LogIn">login</Link>
+              <Outlet/>
+          </div>
+          )
+        }
+        {
+          isAdmin && (
+              <div className='Login-link-container'>
+                  <p className='Login-admin-name'>Hello {currentAdmin.name},</p>
+                  <button onClick={logoutHandler} className='Login-link Login-logout-button'>logout</button>
+              </div>
+          )
+        }
+      </div>
       <div className='Product-left-section'>
         <img src={currentProduct.avatar} alt="product current"/>
-        <h4>{currentProduct.name}</h4>
-        <h6>{currentProduct.description}</h6>
-        <h6>{currentProduct.price}$</h6>
+        <h4 className='Product-left-section-marg Product-left-section-name'>{currentProduct.name}</h4>
+        <h6 className='Product-left-section-marg Product-left-section-description'>{currentProduct.description}</h6>
+        <h6 className='Product-left-section-marg Product-left-section-price'>{currentProduct.price}$</h6>
+        {
+          (currentProduct.stock !== 0) ? (<h6 className='Product-left-section-marg Product-left-section-in-stock'>In stock with {currentProduct.stock} in inventory</h6>) : (<h6 className='Product-left-section-marg Product-left-section-not-in-stock'>Not in stock</h6>)
+        }
       </div>
       <div className='Product-right-section'>
         <div className='Product-buttons'>
-          <button>Add to cart</button>
-          <button>Edit product</button>
-          <button>Delete product</button>
+          <button onClick={addToCartHandler}>Add to cart</button>
+          { isAdmin && <button onClick={editProductHandler}>Edit product</button>}
+          { isAdmin && <button onClick={deleteHandler}>Delete product</button>}
         </div>
       </div>
-      <div className='Product-admin-section'>
-        <p>Name:</p>
-        <input type='text' />
-        <p>Description:</p>
-        <input type='text' />
-        <p></p>
-      </div>
+      
+      { isAdmin && isEditingProduct && <div className='Product-admin-section'>
+        <div className='Product-admin-section-input-section'>
+          <div className='Product-admin-section-input'>
+            <p>Name:</p>
+            <input ref={productNameRef} type='text' />
+          </div>
+          <div className='Product-admin-section-input'>
+            <p>Description:</p>
+            <input ref={productDescriptionRef} type='text' />
+          </div>
+          <div className='Product-admin-section-input'>
+            <p>Price:</p>
+            <input ref={productPriceRef} type='text' />
+          </div>
+          <div className='Product-admin-section-input'>
+            <p>Stock</p>
+            <input ref={productStockRef} type='text' />
+          </div>
+        </div>
+
+        <div className='Product-admin-section-button-section'>
+          <button>Save changes</button>
+          <button onClick={cancelChangesHandler}>Cancel changes</button>
+          <button onClick={deleteHandler}>Delete product</button>
+        </div>
+
+      </div> }
+
     </div>
   )
 }
