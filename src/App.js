@@ -18,8 +18,8 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false)
-  const [currentAdmin, setCurrentAdmin] = useState(null);
-  const [currentProduct, setCurrentProduct] = useState(null);
+  const [currentAdmin, setCurrentAdmin] = useState(JSON.parse(localStorage.getItem('current-admin')));
+  const [currentProduct, setCurrentProduct] = useState(JSON.parse(localStorage.getItem('current-product')));
   const [isEditingProduct, setIsEditingProduct] = useState(false);
 
   useEffect(() => {

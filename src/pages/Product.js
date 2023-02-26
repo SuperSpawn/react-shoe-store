@@ -28,6 +28,8 @@ export const Product = ({currentProduct, setProductArray, isAdmin, isEditingProd
   };
 
 
+  console.log(currentAdmin)
+  console.log(currentProduct)
   
     if(!currentAdmin) {
       const admin = JSON.parse(localStorage.getItem('current-admin'))
@@ -36,7 +38,6 @@ export const Product = ({currentProduct, setProductArray, isAdmin, isEditingProd
           setIsAdmin(true);
       }
     }
-  
   
     if(!currentProduct) {
       const product = JSON.parse(localStorage.getItem('current-product'))
